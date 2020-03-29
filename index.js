@@ -10,9 +10,11 @@ const server = http.createServer((request, response) => {
 
   const method = request.method.toLowerCase();
 
+  const query = parsedUrl.query;
+
   response.end('Hello World\n');
 
-  console.log(`Request received on path: ${trimmedPath} with method: ${method}`);
+  console.log(`Request received on path: ${trimmedPath} with method: ${method} with query: ${JSON.stringify(query)}`);
 });
 
 const port = process.env.PORT || 3000;
