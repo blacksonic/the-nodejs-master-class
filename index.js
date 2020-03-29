@@ -8,13 +8,15 @@ const server = http.createServer((request, response) => {
   const path = parsedUrl.pathname;
   const trimmedPath = path.replace(/^\/+|\/+$/g, '');
 
-  const method = request.method.toLowerCase();
-
-  const query = parsedUrl.query;
-
   response.end('Hello World\n');
 
-  console.log(`Request received on path: ${trimmedPath} with method: ${method} with query: ${JSON.stringify(query)}`);
+  const requestParameters = {
+    path: trimmedPath,
+    method: request.method.toLowerCase(),
+    query: parsedUrl.query,
+    headers: request.headers
+  };
+  console.log(`Request received: ${JSON.stringify(requestParameters, null, 2)}`);
 });
 
 const port = process.env.PORT || 3000;
