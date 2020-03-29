@@ -8,9 +8,11 @@ const server = http.createServer((request, response) => {
   const path = parsedUrl.pathname;
   const trimmedPath = path.replace(/^\/+|\/+$/g, '');
 
-  response.end('Hello World');
+  const method = request.method.toLowerCase();
 
-  console.log(`Request received on path: ${trimmedPath}`);
+  response.end('Hello World\n');
+
+  console.log(`Request received on path: ${trimmedPath} with method: ${method}`);
 });
 
 const port = process.env.PORT || 3000;
