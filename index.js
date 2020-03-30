@@ -16,8 +16,6 @@ const server = http.createServer((request, response) => {
   request.on('end', () => {
     buffer += decoder.end();
 
-    response.end('Hello World\n');
-
     const requestParameters = {
       path: trimmedPath,
       method: request.method.toLowerCase(),
@@ -25,9 +23,31 @@ const server = http.createServer((request, response) => {
       headers: request.headers,
       payload: buffer
     };
-    console.log(`Request received: ${JSON.stringify(requestParameters, null, 2)}`);
+
+    const chosenHandler = router[trimmedPath] || handlers.notFound;
+
+    chosenHandler(requestParameters, (statusCode = 200, payload = {}) => {
+      response.writeHead(statusCode);
+      response.end(JSON.stringify(payload) + '\n');
+
+      console.log(`Request received: ${JSON.stringify(requestParameters, null, 2)}`);
+    });
   });
 });
 
 const port = process.env.PORT || 3000;
 server.listen(port, () => console.log(`Listeninng on port ${port}`));
+
+const handlers = {
+  sample(data, callback) {
+    callback(200, { name: 'sample handler' });
+  },
+
+  notFound(data, callback) {
+    callback(404);
+  }
+};
+
+const router = {
+  sample: handlers.sample
+};
