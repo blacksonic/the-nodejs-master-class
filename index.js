@@ -27,6 +27,7 @@ const server = http.createServer((request, response) => {
     const chosenHandler = router[trimmedPath] || handlers.notFound;
 
     chosenHandler(requestParameters, (statusCode = 200, payload = {}) => {
+      response.setHeader('Content-Type', 'application/json');
       response.writeHead(statusCode);
       response.end(JSON.stringify(payload) + '\n');
 
